@@ -1,5 +1,5 @@
-import { useRoutes, Routes, Route, Navigate, Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useRoutes, Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
 import router from 'src/router';
 
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -20,10 +20,17 @@ import UserManagement from './content/applications/Transactions';
 function Main(props:{type:string}) {
   const content = useRoutes(router);
   const {userPriority} = useContext(UserPriorityContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("st", userPriority)
+    if(!userPriority)
+      navigate("/")
+  }, []);
 
   return (
     <>
-    {props.type=="admin"?(
+      {props.type=="admin"?(
         <SidebarLayout type="admin">
         <Routes>
             <Route path='/dashboard' element={<AdminDashboard/>}/>
@@ -39,7 +46,7 @@ function Main(props:{type:string}) {
             <Route path='*' element={<Navigate to={'/agent/app/management/users'} />} />
           </Routes>        
         </SidebarLayout>
-    )}
+    )}    
     </>
   );
 }
